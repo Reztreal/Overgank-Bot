@@ -14,6 +14,7 @@ We spectate the current match the summoner in and take their names, ids and puui
 
 Using the summoner puuids of the enemy team we create a list of lists called match_history. This list has all of the enemy team player's last 10 matches.
 Then we create a dict called players so we can nicely represent our data.
+```
     players = {
         1: {'name': enemyteam_names[0], 'win': 0, 'lose': 0},
         2: {'name': enemyteam_names[1], 'win': 0, 'lose': 0},
@@ -21,13 +22,15 @@ Then we create a dict called players so we can nicely represent our data.
         4: {'name': enemyteam_names[3], 'win': 0, 'lose': 0},
         5: {'name': enemyteam_names[4], 'win': 0, 'lose': 0},
     }
+```
 
 Now at this point we have to take a really big amount of data from riot and if you watched the video this part is why it takes so long.
 We append every match data of the 50 matches we got earlier from going through the enemy team player's last 10 matches. I found that not saving this data to a list makes the program even slower.
+```
     for i in range(len(match_history)):
         for j in range(len(match_history[i])):
             data.extend(lol_watcher.match.by_id(region, match_history[i][j])['info']['participants'])
-
+```
 
 
 
@@ -35,6 +38,7 @@ We append every match data of the 50 matches we got earlier from going through t
 In the last part of our program we go through the big chunk of data we got and record if the enemy player won or lost that specific game by incrementing either the lose or the win in our dictionary.
 The process in the last 2 paragraphs used to be 3 nested for loops but that makes the program extremely slow so we have to consider the time complexity of our program.
 In the final draft it is O(n^2) which is still pretty bad but I don't think there is any way to process data like this because of the nested nature of riot's api design and I'm not sure how else they could've implemented it.
+```
     m = 0
     cout = 0
     for i in range(len(data)):
@@ -46,3 +50,4 @@ In the final draft it is O(n^2) which is still pretty bad but I don't think ther
         cout += 1
         if cout % 100 == 0:
             m += 1
+```
